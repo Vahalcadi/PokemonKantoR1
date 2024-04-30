@@ -4,7 +4,7 @@ public class TilemapPlayer : MonoBehaviour
 {
     public Rigidbody2D rb;
     public float speed;
-
+    public bool engagedInCombat;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,16 +14,7 @@ public class TilemapPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float xAxis = Input.GetAxisRaw("Horizontal");
-        float yAxis = Input.GetAxisRaw("Vertical");
-
-        //Debug.Log(xAxis);
-        //Debug.Log(yAxis);
-
-        Vector2 direction = new(xAxis, yAxis);
-        rb.velocity = direction * speed;
-
-        Debug.Log(rb.velocity);
+        Movement();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -43,4 +34,18 @@ public class TilemapPlayer : MonoBehaviour
                 transform.position = new Vector2(transform.position.x, transform.position.y - 2);*/
         }
     }
+
+    private void Movement()
+    {
+        float xAxis = Input.GetAxisRaw("Horizontal");
+        float yAxis = Input.GetAxisRaw("Vertical");
+
+        //Debug.Log(xAxis);
+        //Debug.Log(yAxis);
+
+        Vector2 direction = new(xAxis, yAxis);
+        rb.velocity = direction * speed;
+    }
+
+    
 }
