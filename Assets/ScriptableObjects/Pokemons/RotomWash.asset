@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 271319b851ad31044b78191b6d6d22da, type: 3}
   m_Name: RotomWash
   m_EditorClassIdentifier: 
-  name: RotomWash
+  name: Rotom Wash
   frontSprite: {fileID: 21300000, guid: 03c7add851c5fa74da7b8da2ad3c547b, type: 3}
   backSprite: {fileID: 21300000, guid: 0a282591262ea704bade1e1a5d9bc6dc, type: 3}
   type1: 12
@@ -23,3 +23,4 @@ MonoBehaviour:
   specialAttack: 105
   specialDefence: 107
   speed: 86
+  learnableMoves: []

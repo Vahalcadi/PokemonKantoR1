@@ -40,4 +40,16 @@ public class PokemonSO : ScriptableObject
     public int specialAttack;
     public int specialDefence;
     public int speed;
+
+    public List<LearnableMove> learnableMoves;
+
+    
+}
+
+[System.Serializable]
+public class LearnableMove
+{
+    public MovesSO moveSO;
+    public int level;
+
 }
