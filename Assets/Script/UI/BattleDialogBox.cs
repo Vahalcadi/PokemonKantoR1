@@ -43,7 +43,7 @@ public class BattleDialogBox : MonoBehaviour
             if (i < moves.Count)
                 moveButtons[i].text = moves[i].moveSO.name;
             else
-                moveButtons[i].text = "None";
+                moveButtons[i].gameObject.SetActive(false);           
         }
     }
 
