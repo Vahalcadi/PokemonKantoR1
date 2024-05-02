@@ -201,10 +201,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4372933008324784862}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 300, y: -100.00001}
-  m_SizeDelta: {x: 300, y: 100}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 355, y: -135}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &1609006757953249989
 CanvasRenderer:
@@ -352,11 +352,11 @@ MonoBehaviour:
       - m_Target: {fileID: 6642547183958231260}
         m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
         m_MethodName: ConfirmMove
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -450,7 +450,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 120, y: -3.2600021}
+  m_AnchoredPosition: {x: 120, y: 22}
   m_SizeDelta: {x: 587.59, y: 189.7}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1787121493813994845
@@ -474,7 +474,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 300, y: 100}
-  m_Spacing: {x: 0, y: 0}
+  m_Spacing: {x: 55, y: 35}
   m_Constraint: 1
   m_ConstraintCount: 2
 --- !u!1 &5773041922159326616
@@ -645,10 +645,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4372933008324784862}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -100.00001}
-  m_SizeDelta: {x: 300, y: 100}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: -135}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &6232938337063861521
 CanvasRenderer:
@@ -796,11 +796,11 @@ MonoBehaviour:
       - m_Target: {fileID: 6642547183958231260}
         m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
         m_MethodName: ConfirmMove
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -854,10 +854,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4372933008324784862}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 300, y: 0}
-  m_SizeDelta: {x: 300, y: 100}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 355, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &6832609407025130327
 CanvasRenderer:
@@ -1005,11 +1005,11 @@ MonoBehaviour:
       - m_Target: {fileID: 6642547183958231260}
         m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
         m_MethodName: ConfirmMove
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1045,7 +1045,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1410068933890801519
 Transform:
   m_ObjectHideFlags: 0
@@ -1080,7 +1080,6 @@ MonoBehaviour:
   enemyUnit: {fileID: 3803857357197548076}
   enemyHud: {fileID: 4299101310908086031}
   dialogBox: {fileID: 636813402486853939}
-  currentMove: 0
 --- !u!1 &8352436692534697418
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,10 +1114,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4372933008324784862}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &3693643026341017900
 CanvasRenderer:
@@ -1266,7 +1265,7 @@ MonoBehaviour:
       - m_Target: {fileID: 6642547183958231260}
         m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
         m_MethodName: ConfirmMove
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1553,6 +1552,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1997135605089063664}
     m_Modifications:
+    - target: {fileID: 12021933003863309, guid: fd6a7f8df62870f45ad86112499255d4, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 12021933003863309, guid: fd6a7f8df62870f45ad86112499255d4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 187309729826364984, guid: fd6a7f8df62870f45ad86112499255d4, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2064,11 +2071,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8816874158101544303, guid: 40d5b1b77e3768647afb85d217e826f5, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8816874158101544303, guid: 40d5b1b77e3768647afb85d217e826f5, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

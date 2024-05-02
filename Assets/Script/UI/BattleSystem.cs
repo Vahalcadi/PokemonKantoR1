@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -18,8 +19,9 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private BattleHud enemyHud;
     [SerializeField] private BattleDialogBox dialogBox;
 
+    public event Action<bool> OnBattleOver;
+
     private BattleState state;
-    public int currentMove;
 
     public static BattleSystem instance;
 
@@ -31,17 +33,9 @@ public class BattleSystem : MonoBehaviour
             instance = this;
     }
 
-    private void Start()
+    public void StartBattle()
     {
         StartCoroutine(SetupBattle());
-    }
-
-    private void Update()
-    {
-        /*if (state == BattleState.PlayerAction)
-        {
-            //HandleActionSelection();
-        }*/
     }
 
     public IEnumerator SetupBattle()
@@ -81,31 +75,37 @@ public class BattleSystem : MonoBehaviour
             PlayerMove();
     }
 
-    public void ConfirmMove()
+    public void ConfirmMove(int indexOfMove)
     {
         if (state != BattleState.PlayerMove)
             return;
 
         dialogBox.EnableMoveSelector(false);
         dialogBox.EnableDialogueText(true);
-        StartCoroutine(PerformPlayerMove());
+        StartCoroutine(PerformPlayerMove(indexOfMove));
     }
 
-    private IEnumerator PerformPlayerMove()
+    private IEnumerator PerformPlayerMove(int indexOfMove)
     {
         state = BattleState.Busy;
 
-        var move = playerUnit.Pokemon.moves[currentMove];
+        var move = playerUnit.Pokemon.moves[indexOfMove];
+        move.pp--;
+        Debug.Log(indexOfMove);
         dialogBox.SetDialog($"{playerUnit.Pokemon.pokemonSO.name} used {move.moveSO.name}");
         yield return new WaitForSeconds(1.5f);
 
-        bool isFainted = enemyUnit.Pokemon.TakeDamage(move, playerUnit.Pokemon);
+        var damageDetails = enemyUnit.Pokemon.TakeDamage(move, playerUnit.Pokemon);
         yield return enemyHud.UpdateHP();
 
-        if (isFainted)
+        yield return ShowDamageDetails(damageDetails);
+
+        if (damageDetails.Fainted)
         {
             dialogBox.SetDialog($"{enemyUnit.Pokemon.pokemonSO.name} Fainted");
             yield return new WaitForSeconds(2);
+
+            OnBattleOver(true);
         }
         else
         {
@@ -113,21 +113,50 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    private IEnumerator ShowDamageDetails(DamageDetails damageDetails)
+    {
+        if (damageDetails.Critical > 1)
+        {
+            dialogBox.SetDialog("A critical Hit");
+            Debug.Log("Critical");
+            yield return new WaitForSeconds(1.5f);
+        }
+
+        if (damageDetails.TypeEffectiveness > 1)
+        {
+            dialogBox.SetDialog("It's super effective!");
+            Debug.Log("Super effective");
+            yield return new WaitForSeconds(1.5f);
+        }
+        else if (damageDetails.TypeEffectiveness < 1)
+        {
+            dialogBox.SetDialog("It's not very effective...");
+            Debug.Log("Not Effective");
+            yield return new WaitForSeconds(1.5f);
+        }
+            
+    }
+
     private IEnumerator EnemyMove()
     {
         state = BattleState.EnemyMove;
         var move = enemyUnit.Pokemon.GetRandomMove();
+        move.pp--;
 
         dialogBox.SetDialog($"{enemyUnit.Pokemon.pokemonSO.name} used {move.moveSO.name}");
         yield return new WaitForSeconds(1.5f);
 
-        bool isFainted = playerUnit.Pokemon.TakeDamage(move, enemyUnit.Pokemon);
+        var damageDetails = playerUnit.Pokemon.TakeDamage(move, enemyUnit.Pokemon);
         yield return playerHud.UpdateHP();
 
-        if (isFainted)
+        yield return ShowDamageDetails(damageDetails);
+
+        if (damageDetails.Fainted)
         {
             dialogBox.SetDialog($"{playerUnit.Pokemon.pokemonSO.name} Fainted");
             yield return new WaitForSeconds(2);
+
+            OnBattleOver(false);
         }
         else
         {

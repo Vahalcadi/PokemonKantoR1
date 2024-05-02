@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,17 +7,7 @@ public class Bushes : MonoBehaviour
 {
     [SerializeField] private int encounterRatePercentage;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public event Action OnEncountered;
 
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -36,10 +27,10 @@ public class Bushes : MonoBehaviour
         if (PlayerManager.instance.Player.engagedInCombat)
             return;
 
-        if (Random.Range(1, 101) <= encounterRatePercentage)
+        if (UnityEngine.Random.Range(1, 101) <= encounterRatePercentage)
         {
             PlayerManager.instance.Player.engagedInCombat = true;
-            Debug.Log("Engaging Combat");
+            OnEncountered();
         }   
     }
 }

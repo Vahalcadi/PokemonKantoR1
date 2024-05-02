@@ -20,7 +20,8 @@ public enum Type
     POISON,
     WATER,
     BUG,
-    GROUND
+    GROUND,
+    NONE
 }
 
 [CreateAssetMenu]
@@ -56,7 +57,7 @@ public class LearnableMove
 
 public class TypeChart
 {
-    float[][] chart =
+    static float[][] chart =
     {
         //                           DRK,   FHT,   GHT,   PSY,    FAI,    DRG,    FIR,    GRA,    STE,    NOR,  ROCK,  ICE,   ElE,   FLY,   POI,   WAT,   BUG,   GRO 
         /*DARK*/ new float[]        {.5f,   .5f,    2,     2,     .5f,     1,      1,      1,      1,      1,     1,    1,     1,     1,     1,     1,     1,     1},
@@ -78,4 +79,15 @@ public class TypeChart
         /*BUG*/ new float[]          {2,    .5f,   .5f,    2,     .5f,     1,     .5f,     2,     .5f,     1,     1,    1,     1,    .5f,   .5f,    1,     1,     1},
         /*GROUND*/ new float[]       {1,     1,     1,     1,      1,      1,      2,     .5f,     2,      1,     2,    1,     2,     0,     2,     1,    .5f,    1},
     };
+
+    public static float GetEffectiveness(Type attackType, Type defenceType)
+    {
+        if (attackType == Type.NONE || defenceType == Type.NONE)
+            return 1;
+
+        int row = (int)attackType - 1;
+        int col = (int)defenceType - 1;
+
+        return chart[row][col];
+    }
 }

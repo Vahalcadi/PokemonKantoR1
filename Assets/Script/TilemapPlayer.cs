@@ -37,13 +37,13 @@ public class TilemapPlayer : MonoBehaviour
 
     private void Movement()
     {
-        float xAxis = Input.GetAxisRaw("Horizontal");
-        float yAxis = Input.GetAxisRaw("Vertical");
+        /*float xAxis = Input.GetAxisRaw("Horizontal");
+        float yAxis = Input.GetAxisRaw("Vertical");*/
 
         //Debug.Log(xAxis);
         //Debug.Log(yAxis);
 
-        Vector2 direction = new(xAxis, yAxis);
+        Vector2 direction = InputManager.Instance.Movement().normalized;
         rb.velocity = direction * speed;
     }
 

@@ -13,4 +13,6 @@ public class MovesSO : ScriptableObject
     public int power;
     public int accuracy;
     public int pp;
+
+    public bool isSpecial;
 }
