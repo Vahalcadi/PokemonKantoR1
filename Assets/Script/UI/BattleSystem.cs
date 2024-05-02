@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum BattleState
@@ -20,7 +19,17 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private BattleDialogBox dialogBox;
 
     private BattleState state;
-    int currentAction;
+    public int currentMove;
+
+    public static BattleSystem instance;
+
+    private void Awake()
+    {
+        if (instance != null)
+            Destroy(instance.gameObject);
+        else
+            instance = this;
+    }
 
     private void Start()
     {
@@ -69,5 +78,19 @@ public class BattleSystem : MonoBehaviour
     public void FightSelected()
     {
         PlayerMove();
+    }
+
+    public void ConfirmMove()
+    {
+        dialogBox.EnableMoveSelector(false);
+        dialogBox.EnableDialogueText(true);
+        StartCoroutine(PerformPlayerMove());
+    }
+
+    private IEnumerator PerformPlayerMove()
+    {
+        var move = playerUnit.Pokemon.moves[currentMove];
+        dialogBox.SetDialog($"{playerUnit.Pokemon.pokemonSO.name} used {move.moveSO.name}");
+        yield return new WaitForSeconds(2);
     }
 }
