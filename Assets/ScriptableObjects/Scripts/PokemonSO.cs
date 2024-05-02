@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +19,8 @@ public enum Type
     FLYING,
     POISON,
     WATER,
-    BUG
+    BUG,
+    GROUND
 }
 
 [CreateAssetMenu]
@@ -43,7 +43,7 @@ public class PokemonSO : ScriptableObject
 
     public List<LearnableMove> learnableMoves;
 
-    
+
 }
 
 [System.Serializable]
@@ -52,4 +52,30 @@ public class LearnableMove
     public MovesSO moveSO;
     public int level;
 
+}
+
+public class TypeChart
+{
+    float[][] chart =
+    {
+        //                           DRK,   FHT,   GHT,   PSY,    FAI,    DRG,    FIR,    GRA,    STE,    NOR,  ROCK,  ICE,   ElE,   FLY,   POI,   WAT,   BUG,   GRO 
+        /*DARK*/ new float[]        {.5f,   .5f,    2,     2,     .5f,     1,      1,      1,      1,      1,     1,    1,     1,     1,     1,     1,     1,     1},
+        /*FIGHTING*/ new float[]     {2,     1,     0,    .5f,    .5f,     1,      1,      1,      2,      2,     2,    2,     1,    .5f,   .5f,    1,    .5f,    1},
+        /*GHOST*/ new float[]       {.5f,    1,     2,     2,      1,      1,      1,      1,      1,      0,     1,    1,     1,     1,     1,     1,     1,     1},
+        /*PSYCHIC*/ new float[]      {0,     2,     1,     1,      1,      1,      1,      1,     .5f,     1,     1,    1,     1,     1,     2,     1,    .5f,    1},
+        /*FAIRY*/ new float[]        {2,     2,     1,     1,      1,      2,     .5f,     1,     .5f,     1,     1,    1,     1,     1,    .5f,    1,     1,     1},
+        /*DRAGON*/ new float[]       {1,     1,     1,     1,      0,      2,      1,      1,     .5f,     1,     1,    1,     1,     1,     1,     1,     1,     1},
+        /*FIRE*/ new float[]         {1,     1,     1,     1,      1,     .5f,    .5f,     2,      2,      1,    .5f,   2,     1,     1,     1,    .5f,    2,     1},
+        /*GRASS*/ new float[]        {1,     1,     1,     1,      1,     .5f,    .5f,    .5f,    .5f,     1,     2,    1,     1,    .5f,   .5f,    2,    .5f,    2},
+        /*STEEL*/ new float[]        {1,     1,     1,     1,      2,      1,     .5f,     1,     .5f,     1,     2,    2,    .5f,    1,     1,    .5f,    1,     1},
+        /*NORMAL*/ new float[]       {1,     1,     0,     1,      1,      1,      1,      1,     .5f,     1,    .5f,   1,     1,     1,     1,     1,     1,     1},
+        /*ROCK*/ new float[]         {1,     1,     1,     1,      1,      1,      2,      1,     .5f,     1,     1,    2,     1,     2,    .5f,    1,     2,    .5f},
+        /*ICE*/ new float[]          {1,     1,     1,     1,      1,      2,     .5f,     2,     .5f,     1,     1,   .5f,    1,     2,     1,    .5f,    1,     2},
+        /*ELECTRIC*/ new float[]     {1,     1,     1,     1,      1,     .5f,     1,     .5f,     1,      1,     1,    1,    .5f,    2,     1,     2,     1,     0},
+        /*FLYING*/ new float[]       {1,     2,    .5f,    1,      1,      1,      1,      2,     .5f,     1,     1,    1,    .5f,    1,     1,     1,     2,     1},
+        /*POISON*/ new float[]       {1,     1,    .5f,    1,      2,      1,      1,      2,      0,      1,    .5f,   1,     1,     1,    .5f,    1,     1,    .5f},
+        /*WATER*/ new float[]        {1,     1,     1,     1,      1,     .5f,     2,     .5f,     1,      1,     2,    1,     1,     1,     1,    .5f,    1,     2},
+        /*BUG*/ new float[]          {2,    .5f,   .5f,    2,     .5f,     1,     .5f,     2,     .5f,     1,     1,    1,     1,    .5f,   .5f,    1,     1,     1},
+        /*GROUND*/ new float[]       {1,     1,     1,     1,      1,      1,      2,     .5f,     2,      1,     2,    1,     2,     0,     2,     1,    .5f,    1},
+    };
 }
