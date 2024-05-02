@@ -77,11 +77,15 @@ public class BattleSystem : MonoBehaviour
 
     public void FightSelected()
     {
-        PlayerMove();
+        if (state == BattleState.PlayerAction)
+            PlayerMove();
     }
 
     public void ConfirmMove()
     {
+        if (state != BattleState.PlayerMove)
+            return;
+
         dialogBox.EnableMoveSelector(false);
         dialogBox.EnableDialogueText(true);
         StartCoroutine(PerformPlayerMove());
@@ -89,8 +93,45 @@ public class BattleSystem : MonoBehaviour
 
     private IEnumerator PerformPlayerMove()
     {
+        state = BattleState.Busy;
+
         var move = playerUnit.Pokemon.moves[currentMove];
         dialogBox.SetDialog($"{playerUnit.Pokemon.pokemonSO.name} used {move.moveSO.name}");
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
+
+        bool isFainted = enemyUnit.Pokemon.TakeDamage(move, playerUnit.Pokemon);
+        yield return enemyHud.UpdateHP();
+
+        if (isFainted)
+        {
+            dialogBox.SetDialog($"{enemyUnit.Pokemon.pokemonSO.name} Fainted");
+            yield return new WaitForSeconds(2);
+        }
+        else
+        {
+            StartCoroutine(EnemyMove());
+        }
+    }
+
+    private IEnumerator EnemyMove()
+    {
+        state = BattleState.EnemyMove;
+        var move = enemyUnit.Pokemon.GetRandomMove();
+
+        dialogBox.SetDialog($"{enemyUnit.Pokemon.pokemonSO.name} used {move.moveSO.name}");
+        yield return new WaitForSeconds(1.5f);
+
+        bool isFainted = playerUnit.Pokemon.TakeDamage(move, enemyUnit.Pokemon);
+        yield return playerHud.UpdateHP();
+
+        if (isFainted)
+        {
+            dialogBox.SetDialog($"{playerUnit.Pokemon.pokemonSO.name} Fainted");
+            yield return new WaitForSeconds(2);
+        }
+        else
+        {
+            PlayerAction();
+        }
     }
 }

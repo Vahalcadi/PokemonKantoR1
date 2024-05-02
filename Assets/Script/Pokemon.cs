@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ public class Pokemon
     public int level { get; set; }
 
     public int hp;
-    public List<Move> moves {  get; set; }
+    public List<Move> moves { get; set; }
 
     public Pokemon(PokemonSO pokemonSO, int level)
     {
@@ -55,5 +54,32 @@ public class Pokemon
     public int Speed
     {
         get { return Mathf.FloorToInt((pokemonSO.speed * level) / 100) + 5; }
+    }
+
+    public bool TakeDamage(Move move, Pokemon attacker)
+    {
+        float modifiers = Random.Range(0.85f, 1f);
+        Debug.Log(modifiers);
+        float a = (2 * attacker.level + 10) / 250f;
+        Debug.Log(a);
+        float d = a * move.moveSO.power * ((float)attacker.Attack / Defence) + 2;
+        Debug.Log(d);
+        int damage = Mathf.FloorToInt(d * modifiers);
+        Debug.Log(damage);
+
+        hp -= damage;
+
+        if (hp <= 0)
+        {
+            hp = 0;
+            return true;
+        }
+        return false;
+    }
+
+    public Move GetRandomMove()
+    {
+        int r = Random.Range(0, moves.Count);
+        return moves[r];
     }
 }
