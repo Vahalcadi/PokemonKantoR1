@@ -6,7 +6,10 @@ using UnityEngine.UI;
 public class BattleUnit : MonoBehaviour
 {
     [SerializeField] bool isPlayerUnit;
+    [SerializeField] BattleHud hud;
 
+    public BattleHud Hud { get { return hud; } }
+    public bool IsPlayerUnit { get { return isPlayerUnit; } }
     public Pokemon Pokemon { get; set; }
 
     public void Setup(Pokemon pokemon)
@@ -17,6 +20,8 @@ public class BattleUnit : MonoBehaviour
             GetComponent<Image>().sprite = Pokemon.PokemonSO.backSprite;
         else
             GetComponent<Image>().sprite = Pokemon.PokemonSO.frontSprite;
+
+        hud.SetData(pokemon);
     }
 
     public Image GetImageComponent()

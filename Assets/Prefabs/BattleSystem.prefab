@@ -330,9 +330,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUnit: {fileID: 5910216169333835827}
-  playerHud: {fileID: 8918784313851837977}
   enemyUnit: {fileID: 7259302165683981630}
-  enemyHud: {fileID: 4017785840574864916}
   dialogBox: {fileID: 25791192491412394}
   partyScreen: {fileID: 9098381674041861509}
 --- !u!1001 &4117882940599979849
@@ -731,6 +729,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6642547183958231260}
+    - target: {fileID: 6745143661451477623, guid: 40d5b1b77e3768647afb85d217e826f5, type: 3}
+      propertyPath: hud
+      value: 
+      objectReference: {fileID: 4017785840574864916}
+    - target: {fileID: 7719423737156831098, guid: 40d5b1b77e3768647afb85d217e826f5, type: 3}
+      propertyPath: hud
+      value: 
+      objectReference: {fileID: 8918784313851837977}
     - target: {fileID: 7824766938665965461, guid: 40d5b1b77e3768647afb85d217e826f5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
