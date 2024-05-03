@@ -14,14 +14,14 @@ public class BattleHud : MonoBehaviour
     {
         this.pokemon = pokemon;
 
-        name.text = pokemon.pokemonSO.name;
-        level.text = $"Lvl {pokemon.level}";
-        hpSlider.SetupHpBar(pokemon.MaxHp, pokemon.hp);
+        name.text = pokemon.PokemonSO.name;
+        level.text = $"Lvl {pokemon.Level}";
+        hpSlider.SetupHpBar(pokemon.MaxHp, pokemon.Hp);
 
     }
 
     public IEnumerator UpdateHP()
     {
-        yield return hpSlider.SetCurrentHP(pokemon.hp);
+        yield return hpSlider.SetCurrentHP(pokemon.Hp);
     }
 }

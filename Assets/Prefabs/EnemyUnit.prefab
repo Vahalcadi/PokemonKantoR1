@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 73554f25fb84d944287f28fd9ea1ee9f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 03c7add851c5fa74da7b8da2ad3c547b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -88,6 +88,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c0a0f01e2e5a1c4fa3db12488d862b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pokemonSo: {fileID: 11400000, guid: 1af731a0b3eeeb7408556eb14e98c936, type: 2}
-  level: 7
   isPlayerUnit: 0

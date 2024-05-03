@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private TilemapPlayer player;
+    [SerializeField] private PokemonParty playerParty;
     public static PlayerManager instance;
 
     private void Awake()
@@ -16,4 +17,5 @@ public class PlayerManager : MonoBehaviour
     }
 
     public TilemapPlayer Player { get { return player; } }
+    public PokemonParty PlayerParty { get { return playerParty; } }
 }

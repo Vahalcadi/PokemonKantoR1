@@ -1,19 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Pokemon
 {
-    public PokemonSO pokemonSO { get; set; }
-    public int level { get; set; }
+    [SerializeField] private PokemonSO pokemonSO;
+    [SerializeField] private int level;
 
-    public int hp;
+    public PokemonSO PokemonSO { get { return pokemonSO; } }
+    public int Level { get { return level; } }
+
+    public int Hp { get; set; }
     public List<Move> moves { get; set; }
 
-    public Pokemon(PokemonSO pokemonSO, int level)
-    {
-        this.pokemonSO = pokemonSO;
-        this.level = level;
-        hp = MaxHp;
+    public void InitialisePokemon()
+    {   
+        Hp = MaxHp;
         moves = new List<Move>();
 
         foreach (var move in pokemonSO.learnableMoves)
@@ -28,32 +30,32 @@ public class Pokemon
 
     public int MaxHp
     {
-        get { return Mathf.FloorToInt((pokemonSO.maxHp * level) / 100) + 10; }
+        get { return Mathf.FloorToInt((PokemonSO.maxHp * Level) / 100) + 10; }
     }
 
     public int Attack
     {
-        get { return Mathf.FloorToInt((pokemonSO.attack * level) / 100) + 5; }
+        get { return Mathf.FloorToInt((PokemonSO.attack * Level) / 100) + 5; }
     }
 
     public int Defence
     {
-        get { return Mathf.FloorToInt((pokemonSO.defence * level) / 100) + 5; }
+        get { return Mathf.FloorToInt((PokemonSO.defence * Level) / 100) + 5; }
     }
 
     public int SpAttack
     {
-        get { return Mathf.FloorToInt((pokemonSO.specialAttack * level) / 100) + 5; }
+        get { return Mathf.FloorToInt((PokemonSO.specialAttack * Level) / 100) + 5; }
     }
 
     public int SpDefence
     {
-        get { return Mathf.FloorToInt((pokemonSO.specialDefence * level) / 100) + 5; }
+        get { return Mathf.FloorToInt((PokemonSO.specialDefence * Level) / 100) + 5; }
     }
 
     public int Speed
     {
-        get { return Mathf.FloorToInt((pokemonSO.speed * level) / 100) + 5; }
+        get { return Mathf.FloorToInt((PokemonSO.speed * Level) / 100) + 5; }
     }
 
     public DamageDetails TakeDamage(Move move, Pokemon attacker)
@@ -62,7 +64,7 @@ public class Pokemon
         if (Random.value * 100 <= 6.25f)
             critical = 1.5f;
 
-        float typeEffectiveness = TypeChart.GetEffectiveness(move.moveSO.type, pokemonSO.type1) * TypeChart.GetEffectiveness(move.moveSO.type, pokemonSO.type2);
+        float typeEffectiveness = TypeChart.GetEffectiveness(move.moveSO.type, PokemonSO.type1) * TypeChart.GetEffectiveness(move.moveSO.type, PokemonSO.type2);
 
         var damageDetails = new DamageDetails()
         {
@@ -72,7 +74,7 @@ public class Pokemon
         };
         float modifiers = Random.Range(0.85f, 1f) * typeEffectiveness * critical;
         
-        float a = (2 * attacker.level + 10) / 250f;
+        float a = (2 * attacker.Level + 10) / 250f;
         
         float d;
 
@@ -84,11 +86,11 @@ public class Pokemon
         int damage = Mathf.FloorToInt(d * modifiers);
         Debug.Log(damage);
 
-        hp -= damage;
+        Hp -= damage;
 
-        if (hp <= 0)
+        if (Hp <= 0)
         {
-            hp = 0;
+            Hp = 0;
             damageDetails.Fainted = true;
         }
         return damageDetails;

@@ -41,7 +41,10 @@ public class BattleDialogBox : MonoBehaviour
         for (int i = 0; i < moveButtons.Count; i++)
         {
             if (i < moves.Count)
+            {
                 moveButtons[i].text = moves[i].moveSO.name;
+                moveButtons[i].gameObject.SetActive(true);
+            }
             else
                 moveButtons[i].gameObject.SetActive(false);           
         }

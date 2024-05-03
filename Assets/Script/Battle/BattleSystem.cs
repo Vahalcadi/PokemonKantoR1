@@ -8,7 +8,8 @@ public enum BattleState
     PlayerAction,
     PlayerMove,
     EnemyMove,
-    Busy
+    Busy,
+    PartyScreen
 }
 
 public class BattleSystem : MonoBehaviour
@@ -18,12 +19,16 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private BattleUnit enemyUnit;
     [SerializeField] private BattleHud enemyHud;
     [SerializeField] private BattleDialogBox dialogBox;
+    [SerializeField] private PartyScreen partyScreen;
 
     public event Action<bool> OnBattleOver;
 
     private BattleState state;
 
     public static BattleSystem instance;
+
+    private PokemonParty playerParty;
+    private Pokemon wildPokemon;
 
     private void Awake()
     {
@@ -33,22 +38,26 @@ public class BattleSystem : MonoBehaviour
             instance = this;
     }
 
-    public void StartBattle()
+    public void StartBattle(PokemonParty playerParty, Pokemon wildPokemon)
     {
+        this.playerParty = playerParty;
+        this.wildPokemon = wildPokemon;
         StartCoroutine(SetupBattle());
     }
 
     public IEnumerator SetupBattle()
     {
-        playerUnit.Setup();
+        playerUnit.Setup(playerParty.GetAlivePokemon());
         playerHud.SetData(playerUnit.Pokemon);
 
-        enemyUnit.Setup();
+        enemyUnit.Setup(wildPokemon);
         enemyHud.SetData(enemyUnit.Pokemon);
+
+        partyScreen.Initialise();
 
         dialogBox.SetMoveNames(playerUnit.Pokemon.moves);
 
-        dialogBox.SetDialog($"A wild {enemyUnit.pokemonSo.name} appear");
+        dialogBox.SetDialog($"A wild {enemyUnit.Pokemon.PokemonSO.name} appear");
         yield return new WaitForSeconds(2);
 
         PlayerAction();
@@ -59,6 +68,13 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.PlayerAction;
         dialogBox.SetDialog("Choose an action");
         dialogBox.EnableActionSelector(true);
+    }
+
+    private void OpenPartyScreen()
+    {
+        state = BattleState.PartyScreen;
+        partyScreen.SetPartyData(playerParty.Pokemons);
+        partyScreen.gameObject.SetActive(true);
     }
 
     private void PlayerMove()
@@ -74,6 +90,28 @@ public class BattleSystem : MonoBehaviour
         if (state == BattleState.PlayerAction)
             PlayerMove();
     }
+    public void BagSelected()
+    {
+        if (state == BattleState.PlayerAction)
+            Debug.Log("accessing bag");
+    }
+    public void PokemonSelected()
+    {
+        if (state == BattleState.PlayerAction)
+            OpenPartyScreen();
+    }
+    public void RunSelected()
+    {
+        if (state == BattleState.PlayerAction)
+            Debug.Log("run");
+    }
+    public void GoBackToActionSelection()
+    {
+        partyScreen.gameObject.SetActive(false);
+        dialogBox.EnableMoveSelector(false);
+        dialogBox.EnableDialogueText(true);
+        PlayerAction();
+    }
 
     public void ConfirmMove(int indexOfMove)
     {
@@ -85,6 +123,54 @@ public class BattleSystem : MonoBehaviour
         StartCoroutine(PerformPlayerMove(indexOfMove));
     }
 
+    public void ConfirmPokemon(int indexOfPokemon)
+    {
+        if (state != BattleState.PartyScreen)
+            return;
+
+        var selectedMember = playerParty.Pokemons[indexOfPokemon];
+        if (selectedMember.Hp <= 0)
+        {
+            partyScreen.SetMessageText("Pokemon is fainted");
+            return;
+        }
+        if (selectedMember == playerUnit.Pokemon)
+        {
+            partyScreen.SetMessageText("Pokemon is already in combat");
+            return;
+        }
+
+        partyScreen.gameObject.SetActive(false);
+        state = BattleState.Busy;
+        StartCoroutine(SwitchPokemon(selectedMember));
+    }
+
+    private IEnumerator SwitchPokemon(Pokemon newPokemon)
+    {
+        dialogBox.EnableActionSelector(false);
+        dialogBox.EnableMoveSelector(false);
+
+        if (playerUnit.Pokemon.Hp > 0)
+        {
+            dialogBox.SetDialog($"Come back {playerUnit.Pokemon.PokemonSO.name}");
+            yield return new WaitForSeconds(1f);
+            playerUnit.GetImageComponent().enabled = false;
+        }      
+
+        playerUnit.Setup(newPokemon);
+        playerHud.SetData(newPokemon);
+
+        dialogBox.SetMoveNames(newPokemon.moves);
+
+        dialogBox.SetDialog($"Go {newPokemon.PokemonSO.name}");
+        yield return new WaitForSeconds(1f);
+        playerUnit.GetImageComponent().enabled = true;
+
+        yield return new WaitForSeconds(1);
+
+        StartCoroutine(EnemyMove());
+    }
+
     private IEnumerator PerformPlayerMove(int indexOfMove)
     {
         state = BattleState.Busy;
@@ -92,7 +178,7 @@ public class BattleSystem : MonoBehaviour
         var move = playerUnit.Pokemon.moves[indexOfMove];
         move.pp--;
         Debug.Log(indexOfMove);
-        dialogBox.SetDialog($"{playerUnit.Pokemon.pokemonSO.name} used {move.moveSO.name}");
+        dialogBox.SetDialog($"{playerUnit.Pokemon.PokemonSO.name} used {move.moveSO.name}");
         yield return new WaitForSeconds(1.5f);
 
         var damageDetails = enemyUnit.Pokemon.TakeDamage(move, playerUnit.Pokemon);
@@ -102,7 +188,7 @@ public class BattleSystem : MonoBehaviour
 
         if (damageDetails.Fainted)
         {
-            dialogBox.SetDialog($"{enemyUnit.Pokemon.pokemonSO.name} Fainted");
+            dialogBox.SetDialog($"{enemyUnit.Pokemon.PokemonSO.name} Fainted");
             yield return new WaitForSeconds(2);
 
             OnBattleOver(true);
@@ -143,7 +229,7 @@ public class BattleSystem : MonoBehaviour
         var move = enemyUnit.Pokemon.GetRandomMove();
         move.pp--;
 
-        dialogBox.SetDialog($"{enemyUnit.Pokemon.pokemonSO.name} used {move.moveSO.name}");
+        dialogBox.SetDialog($"{enemyUnit.Pokemon.PokemonSO.name} used {move.moveSO.name}");
         yield return new WaitForSeconds(1.5f);
 
         var damageDetails = playerUnit.Pokemon.TakeDamage(move, enemyUnit.Pokemon);
@@ -153,10 +239,18 @@ public class BattleSystem : MonoBehaviour
 
         if (damageDetails.Fainted)
         {
-            dialogBox.SetDialog($"{playerUnit.Pokemon.pokemonSO.name} Fainted");
-            yield return new WaitForSeconds(2);
+            dialogBox.SetDialog($"{playerUnit.Pokemon.PokemonSO.name} Fainted");
+            yield return new WaitForSeconds(1);
+            playerUnit.GetImageComponent().enabled = false;
+            yield return new WaitForSeconds(1);
 
-            OnBattleOver(false);
+            var nextPokemon = playerParty.GetAlivePokemon();
+            if (nextPokemon != null)
+            {
+                OpenPartyScreen();
+            }
+            else
+                OnBattleOver(false);
         }
         else
         {

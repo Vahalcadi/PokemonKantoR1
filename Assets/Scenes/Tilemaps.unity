@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1089204030}
+  playerParty: {fileID: 1089204035}
 --- !u!4 &12638329
 Transform:
   m_ObjectHideFlags: 0
@@ -11362,6 +11363,7 @@ GameObject:
   - component: {fileID: 1089204032}
   - component: {fileID: 1089204031}
   - component: {fileID: 1089204030}
+  - component: {fileID: 1089204035}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -11524,6 +11526,23 @@ Transform:
   - {fileID: 21723774}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1089204035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089204029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64b88e877017c6143beba80c1613edf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pokemons:
+  - pokemonSO: {fileID: 11400000, guid: 1af731a0b3eeeb7408556eb14e98c936, type: 2}
+    level: 7
+  - pokemonSO: {fileID: 11400000, guid: 5193543725732ce44add0db142e6cafd, type: 2}
+    level: 2
 --- !u!1 &1135184347
 GameObject:
   m_ObjectHideFlags: 0
@@ -12692,6 +12711,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1991940501}
   - component: {fileID: 1991940500}
+  - component: {fileID: 1991940502}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -12730,6 +12750,23 @@ Transform:
   - {fileID: 1649296163}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1991940502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991940499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc588adb09597ce4785664b8b69f2e79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wildPokemons:
+  - pokemonSO: {fileID: 11400000, guid: 1af731a0b3eeeb7408556eb14e98c936, type: 2}
+    level: 2
+  - pokemonSO: {fileID: 11400000, guid: 5193543725732ce44add0db142e6cafd, type: 2}
+    level: 3
 --- !u!1001 &2454642068358411247
 PrefabInstance:
   m_ObjectHideFlags: 0
