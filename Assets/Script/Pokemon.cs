@@ -12,10 +12,13 @@ public class Pokemon
 
     public int Hp { get; set; }
     public List<Move> moves { get; set; }
+    public Dictionary<Stat, int> Stats { get; private set; }
+    public Dictionary<Stat, int> StatBoosts { get; private set; }
+
+    public Queue<string> StatusChanges { get; private set; } = new Queue<string>();
 
     public void InitialisePokemon()
-    {   
-        Hp = MaxHp;
+    {
         moves = new List<Move>();
 
         foreach (var move in pokemonSO.learnableMoves)
@@ -26,36 +29,97 @@ public class Pokemon
             if (moves.Count >= 4)
                 break;
         }
+
+        CalculateStats();
+        Hp = MaxHp;
+
+        ResetStatBoosts();
     }
 
-    public int MaxHp
+    private void ResetStatBoosts()
     {
-        get { return Mathf.FloorToInt((PokemonSO.maxHp * Level) / 100) + 10; }
+        StatBoosts = new Dictionary<Stat, int>()
+        {
+            {Stat.Attack, 0},
+            {Stat.Defence, 0},
+            {Stat.SpAttack, 0},
+            {Stat.SpDefence, 0},
+            {Stat.Speed, 0},
+        };
     }
+
+    private void CalculateStats()
+    {
+        Stats = new Dictionary<Stat, int>
+        {
+            { Stat.Attack, Mathf.FloorToInt((PokemonSO.attack * Level) / 100) + 5 },
+            { Stat.Defence, Mathf.FloorToInt((PokemonSO.defence * Level) / 100) + 5 },
+            { Stat.SpAttack, Mathf.FloorToInt((PokemonSO.specialAttack * Level) / 100) + 5 },
+            { Stat.SpDefence, Mathf.FloorToInt((PokemonSO.specialDefence * Level) / 100) + 5 },
+            { Stat.Speed, Mathf.FloorToInt((PokemonSO.speed * Level) / 100) + 5 }
+        };
+
+        MaxHp = Mathf.FloorToInt((PokemonSO.maxHp * Level) / 100) + 10;
+    }
+
+    private int GetStat(Stat stat)
+    {
+        int statVal = Stats[stat];
+
+        int boost = StatBoosts[stat];
+        var boostValues = new float[] { 1, 1.5f, 2, 2.5f, 3, 3.5f, 4 };
+
+        if (boost >= 0)
+            statVal = Mathf.FloorToInt(statVal * boostValues[boost]);
+        else
+            statVal = Mathf.FloorToInt(statVal / boostValues[-boost]);
+
+        return statVal;
+    }
+
+    public void ApplyBoosts(List<StatBoost> statBoosts)
+    {
+        foreach (var statBoost in statBoosts)
+        {
+            var stat = statBoost.stat;
+            var boost = statBoost.boost;
+
+            StatBoosts[stat] = Mathf.Clamp(StatBoosts[stat] + boost, -6, 6);
+
+            if (boost > 0)
+                StatusChanges.Enqueue($"{pokemonSO.name}'s {stat} rose!");
+            else
+                StatusChanges.Enqueue($"{pokemonSO.name}'s {stat} fell!");
+
+            Debug.Log($"{stat} has been boosted to {StatBoosts[stat]}");
+        }
+    }
+
+    public int MaxHp { get; private set; }
 
     public int Attack
     {
-        get { return Mathf.FloorToInt((PokemonSO.attack * Level) / 100) + 5; }
+        get { return GetStat(Stat.Attack); }
     }
 
     public int Defence
     {
-        get { return Mathf.FloorToInt((PokemonSO.defence * Level) / 100) + 5; }
+        get { return GetStat(Stat.Defence); }
     }
 
     public int SpAttack
     {
-        get { return Mathf.FloorToInt((PokemonSO.specialAttack * Level) / 100) + 5; }
+        get { return GetStat(Stat.SpAttack); }
     }
 
     public int SpDefence
     {
-        get { return Mathf.FloorToInt((PokemonSO.specialDefence * Level) / 100) + 5; }
+        get { return GetStat(Stat.SpDefence); }
     }
 
     public int Speed
     {
-        get { return Mathf.FloorToInt((PokemonSO.speed * Level) / 100) + 5; }
+        get { return GetStat(Stat.Speed); }
     }
 
     public DamageDetails TakeDamage(Move move, Pokemon attacker)
@@ -78,7 +142,7 @@ public class Pokemon
         
         float d;
 
-        if (move.moveSO.isSpecial)
+        if (move.moveSO.moveCategory == MoveCategory.Special)
             d = a * move.moveSO.power * ((float)attacker.SpAttack / SpDefence) + 2;
         else
             d = a * move.moveSO.power * ((float)attacker.Attack / Defence) + 2;
@@ -100,6 +164,11 @@ public class Pokemon
     {
         int r = Random.Range(0, moves.Count);
         return moves[r];
+    }
+
+    public void OnBattleOver()
+    {
+        ResetStatBoosts();
     }
 }
 

@@ -13,6 +13,35 @@ public class MovesSO : ScriptableObject
     public int power;
     public int accuracy;
     public int pp;
+    public MoveCategory moveCategory;
+    public MoveEffects moveEffects;
+    public MoveTarget target;
+}
 
-    public bool isSpecial;
+[System.Serializable]
+public class MoveEffects
+{
+    [SerializeField] private List<StatBoost> boosts;
+
+    public List<StatBoost> Boosts { get { return boosts; } }
+}
+
+[System.Serializable]
+public class StatBoost
+{
+    public Stat stat;
+    public int boost;
+}
+
+public enum MoveCategory
+{
+    Physical,
+    Special,
+    Status
+}
+
+public enum MoveTarget
+{
+    Foe,
+    Self
 }

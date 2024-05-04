@@ -24,6 +24,15 @@ public enum Type
     NONE
 }
 
+public enum Stat
+{
+    Attack,
+    Defence,
+    SpAttack,
+    SpDefence,
+    Speed
+}
+
 [CreateAssetMenu]
 public class PokemonSO : ScriptableObject
 {

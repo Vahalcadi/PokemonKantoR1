@@ -10,15 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7404a212402dc84d992ef6eb4767644, type: 3}
-  m_Name: ThunderShock
+  m_Name: SwordsDance
   m_EditorClassIdentifier: 
-  name: Thunder Shock
+  name: Swords Dance
   description: 
-  type: 12
-  power: 40
-  accuracy: 100
-  pp: 30
-  moveCategory: 1
+  type: 9
+  power: 0
+  accuracy: 0
+  pp: 20
+  moveCategory: 2
   moveEffects:
-    boosts: []
-  target: 0
+    boosts:
+    - stat: 0
+      boost: 2
+  target: 1
