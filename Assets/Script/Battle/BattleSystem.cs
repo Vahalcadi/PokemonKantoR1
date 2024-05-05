@@ -7,10 +7,18 @@ public enum BattleState
     Start,
     ActionSelection,
     MoveSelection,
-    PerformMove,
+    RunningTurn,
     Busy,
     PartyScreen,
     BattleOver
+}
+
+public enum BattleAction
+{
+    Move,
+    SwitchPokemon,
+    UseItem,
+    Run
 }
 
 public class BattleSystem : MonoBehaviour
@@ -23,6 +31,7 @@ public class BattleSystem : MonoBehaviour
     public event Action<bool> OnBattleOver;
 
     private BattleState state;
+    private BattleState? prevState;
 
     public static BattleSystem instance;
 
@@ -57,7 +66,7 @@ public class BattleSystem : MonoBehaviour
         dialogBox.SetDialog($"A wild {enemyUnit.Pokemon.PokemonSO.name} appear");
         yield return new WaitForSeconds(2);
 
-        ChooseFirstTurn();
+        ActionSelection();
     }
 
     #region player actions
@@ -88,7 +97,10 @@ public class BattleSystem : MonoBehaviour
     public void PokemonSelected()
     {
         if (state == BattleState.ActionSelection)
+        {
+            prevState = state;
             OpenPartyScreen();
+        }
     }
     public void RunSelected()
     {
@@ -120,18 +132,9 @@ public class BattleSystem : MonoBehaviour
 
         dialogBox.EnableMoveSelector(false);
         dialogBox.EnableDialogueText(true);
-        StartCoroutine(PlayerMove(indexOfMove));
+        StartCoroutine(RunTurns(BattleAction.Move,indexOfMove,-1));
     }
-    private IEnumerator PlayerMove(int indexOfMove)
-    {
-        state = BattleState.PerformMove;
-
-        var move = playerUnit.Pokemon.moves[indexOfMove];
-        yield return RunMove(playerUnit, enemyUnit, move);
-
-        if(state == BattleState.PerformMove)
-            StartCoroutine(EnemyMove());
-    }
+   
     #endregion
 
     #region switch pokemons
@@ -153,8 +156,17 @@ public class BattleSystem : MonoBehaviour
         }
 
         partyScreen.gameObject.SetActive(false);
-        state = BattleState.Busy;
-        StartCoroutine(SwitchPokemon(selectedMember));
+
+        if (prevState == BattleState.ActionSelection)
+        {
+            prevState = null;
+            StartCoroutine(RunTurns(BattleAction.SwitchPokemon, -1, indexOfPokemon));
+        }
+        else
+        {
+            state = BattleState.Busy;
+            StartCoroutine(SwitchPokemon(selectedMember));
+        }
     }
 
     private IEnumerator SwitchPokemon(Pokemon newPokemon)
@@ -162,11 +174,8 @@ public class BattleSystem : MonoBehaviour
         dialogBox.EnableActionSelector(false);
         dialogBox.EnableMoveSelector(false);
 
-        bool currentPokemonFainted = true;
-
         if (playerUnit.Pokemon.Hp > 0)
         {
-            currentPokemonFainted = false;
             dialogBox.SetDialog($"Come back {playerUnit.Pokemon.PokemonSO.name}");
             yield return new WaitForSeconds(1f);
             playerUnit.GetImageComponent().enabled = false;
@@ -182,12 +191,59 @@ public class BattleSystem : MonoBehaviour
 
         yield return new WaitForSeconds(1);
 
-        if (currentPokemonFainted)
-            ChooseFirstTurn();
-        else
-            StartCoroutine(EnemyMove());
+        state = BattleState.RunningTurn;
     }
     #endregion
+
+
+    public IEnumerator RunTurns(BattleAction playerAction, int indexOfMove, int indexOfPokemon)
+    {
+        state = BattleState.RunningTurn;
+
+        if (playerAction == BattleAction.Move)
+        {
+            playerUnit.Pokemon.CurrentMove = playerUnit.Pokemon.moves[indexOfMove];
+            enemyUnit.Pokemon.CurrentMove = enemyUnit.Pokemon.GetRandomMove();
+
+            bool playerGoesFirst = playerUnit.Pokemon.Speed >= enemyUnit.Pokemon.Speed;
+
+            var firstUnit = (playerGoesFirst) ? playerUnit : enemyUnit;
+            var secondUnit = (playerGoesFirst) ? enemyUnit : playerUnit;
+
+            var secondPokemon = secondUnit.Pokemon;
+
+            //first turn
+            yield return RunMove(firstUnit, secondUnit, firstUnit.Pokemon.CurrentMove);
+            yield return RunAfterTurn(firstUnit);
+            if (state == BattleState.BattleOver)
+                yield break;
+
+            if (secondPokemon.Hp > 0)
+            {
+                //second turn
+                yield return RunMove(secondUnit, firstUnit, secondUnit.Pokemon.CurrentMove);
+                yield return RunAfterTurn(secondUnit);
+            }
+            
+        }
+        else
+        {
+            if (playerAction == BattleAction.SwitchPokemon)
+            {
+                var selectedPokemon = playerParty.Pokemons[indexOfPokemon];
+                state = BattleState.Busy;
+                yield return SwitchPokemon(selectedPokemon);
+            }
+            var enemyMove = enemyUnit.Pokemon.GetRandomMove();
+            yield return RunMove(enemyUnit, playerUnit, enemyMove);
+            yield return RunAfterTurn(enemyUnit);
+            if (state == BattleState.BattleOver)
+                yield break;
+        }
+
+        if (state != BattleState.BattleOver)
+            ActionSelection();
+    }
 
     private bool CheckIfMoveHits(Move move, Pokemon source, Pokemon target)
     {
@@ -262,22 +318,32 @@ public class BattleSystem : MonoBehaviour
                 CheckForBattleOver(targetUnit);
             }
 
-            sourceUnit.Pokemon.OnAfterTurn();
-            yield return ShowStatusChanges(sourceUnit.Pokemon);
-            yield return sourceUnit.Hud.UpdateHP();
-            if (sourceUnit.Pokemon.Hp <= 0)
-            {
-                dialogBox.SetDialog($"{sourceUnit.Pokemon.PokemonSO.name} Fainted");
-                yield return new WaitForSeconds(2);
-
-                CheckForBattleOver(targetUnit);
-            }
+            
         }
         else
         {
             dialogBox.SetDialog($"{sourceUnit.Pokemon.PokemonSO.name}'s attack missed");
             yield return new WaitForSeconds(1.5f);
         } 
+    }
+
+    IEnumerator RunAfterTurn(BattleUnit sourceUnit)
+    {
+        if (state == BattleState.BattleOver)
+            yield break;
+
+        yield return new WaitUntil(() => state == BattleState.RunningTurn);
+
+        sourceUnit.Pokemon.OnAfterTurn();
+        yield return ShowStatusChanges(sourceUnit.Pokemon);
+        yield return sourceUnit.Hud.UpdateHP();
+        if (sourceUnit.Pokemon.Hp <= 0)
+        {
+            dialogBox.SetDialog($"{sourceUnit.Pokemon.PokemonSO.name} Fainted");
+            yield return new WaitForSeconds(2);
+
+            CheckForBattleOver(sourceUnit);
+        }
     }
 
     private IEnumerator RunMoveEffects(MoveEffects effects, Pokemon source, Pokemon target, MoveTarget moveTarget)
@@ -333,13 +399,6 @@ public class BattleSystem : MonoBehaviour
             
     }
 
-    private void ChooseFirstTurn()
-    {
-        if (playerUnit.Pokemon.Speed >= enemyUnit.Pokemon.Speed)
-            ActionSelection();
-        else
-            StartCoroutine(EnemyMove());
-    }
 
     private void BattleOver(bool won)
     {
@@ -364,15 +423,4 @@ public class BattleSystem : MonoBehaviour
             BattleOver(true);    
     }
 
-    private IEnumerator EnemyMove()
-    {
-        state = BattleState.PerformMove;
-        var move = enemyUnit.Pokemon.GetRandomMove();
-        move.pp--;
-
-        yield return RunMove(enemyUnit, playerUnit, move);
-
-        if (state == BattleState.PerformMove)
-            ActionSelection();      
-    }
 }
