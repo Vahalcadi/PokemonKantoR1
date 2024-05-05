@@ -192,6 +192,14 @@ public class BattleSystem : MonoBehaviour
     
     private IEnumerator RunMove(BattleUnit sourceUnit, BattleUnit targetUnit, Move move)
     {
+        bool canRunMove = sourceUnit.Pokemon.OnBeforeTurn();
+        if (!canRunMove)
+        {
+            yield return ShowStatusChanges(sourceUnit.Pokemon);
+            yield break;
+        }
+        yield return ShowStatusChanges(sourceUnit.Pokemon);
+
         move.pp--;
         dialogBox.SetDialog($"{sourceUnit.Pokemon.PokemonSO.name} used {move.moveSO.name}");
         yield return new WaitForSeconds(1.5f);
@@ -214,7 +222,17 @@ public class BattleSystem : MonoBehaviour
 
             CheckForBattleOver(targetUnit);
         }
-        
+
+        sourceUnit.Pokemon.OnAfterTurn();
+        yield return ShowStatusChanges(sourceUnit.Pokemon);
+        yield return sourceUnit.Hud.UpdateHP();
+        if (sourceUnit.Pokemon.Hp <= 0)
+        {
+            dialogBox.SetDialog($"{sourceUnit.Pokemon.PokemonSO.name} Fainted");
+            yield return new WaitForSeconds(2);
+
+            CheckForBattleOver(targetUnit);
+        }
     }
 
     private IEnumerator RunMoveEffects(Move move, Pokemon source, Pokemon target)
@@ -227,6 +245,11 @@ public class BattleSystem : MonoBehaviour
                 source.ApplyBoosts(effects.Boosts);
             else
                 target.ApplyBoosts(effects.Boosts);
+        }
+
+        if (effects.Status != ConditionID.none)
+        {
+            target.SetStatus(effects.Status);
         }
 
         yield return ShowStatusChanges(source);

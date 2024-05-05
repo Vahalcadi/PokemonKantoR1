@@ -22,8 +22,10 @@ public class MovesSO : ScriptableObject
 public class MoveEffects
 {
     [SerializeField] private List<StatBoost> boosts;
+    [SerializeField] private ConditionID status;
 
     public List<StatBoost> Boosts { get { return boosts; } }
+    public ConditionID Status { get { return status; } }
 }
 
 [System.Serializable]

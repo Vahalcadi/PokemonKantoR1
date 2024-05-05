@@ -15,6 +15,11 @@ public class GameController : MonoBehaviour
     [SerializeField] Camera worldCamera;
     GameState state;
 
+    private void Awake()
+    {
+        ConditionsDB.Initialise();
+    }
+
     private void Start()
     {
         Bushes.OnEncountered += StartBattle;

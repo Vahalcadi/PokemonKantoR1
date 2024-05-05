@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,8 +15,12 @@ public class Pokemon
     public List<Move> moves { get; set; }
     public Dictionary<Stat, int> Stats { get; private set; }
     public Dictionary<Stat, int> StatBoosts { get; private set; }
+    public Condition Status { get; private set; } 
+    public int StatusTime { get; set; }
 
     public Queue<string> StatusChanges { get; private set; } = new Queue<string>();
+    public bool HpChanged { get; set; }
+    public event Action OnStatusChanged;
 
     public void InitialisePokemon()
     {
@@ -34,6 +39,29 @@ public class Pokemon
         Hp = MaxHp;
 
         ResetStatBoosts();
+    }
+
+    public void SetStatus(ConditionID conditionID)
+    {
+        if (Status != null)
+            return;
+
+        Status = ConditionsDB.Conditions[conditionID];
+        Status?.OnStart?.Invoke(this);
+        StatusChanges.Enqueue($"{pokemonSO.name} {Status.StartMessage}");
+        OnStatusChanged?.Invoke();
+    }
+
+    public void CureStatus()
+    {
+        Status = null;
+        OnStatusChanged?.Invoke();
+    }
+
+    public void UpdateHp(int damage)
+    {
+        Hp = Mathf.Clamp(Hp - damage, 0, MaxHp);
+        HpChanged = true;
     }
 
     private void ResetStatBoosts()
@@ -59,7 +87,7 @@ public class Pokemon
             { Stat.Speed, Mathf.FloorToInt((PokemonSO.speed * Level) / 100) + 5 }
         };
 
-        MaxHp = Mathf.FloorToInt((PokemonSO.maxHp * Level) / 100) + 10;
+        MaxHp = Mathf.FloorToInt((PokemonSO.maxHp * Level) / 100) + 10 + Level;
     }
 
     private int GetStat(Stat stat)
@@ -125,7 +153,7 @@ public class Pokemon
     public DamageDetails TakeDamage(Move move, Pokemon attacker)
     {
         float critical = 1;
-        if (Random.value * 100 <= 6.25f)
+        if (UnityEngine.Random.value * 100 <= 6.25f)
             critical = 1.5f;
 
         float typeEffectiveness = TypeChart.GetEffectiveness(move.moveSO.type, PokemonSO.type1) * TypeChart.GetEffectiveness(move.moveSO.type, PokemonSO.type2);
@@ -136,7 +164,7 @@ public class Pokemon
             Critical = critical,
             Fainted = false
         };
-        float modifiers = Random.Range(0.85f, 1f) * typeEffectiveness * critical;
+        float modifiers = UnityEngine.Random.Range(0.85f, 1f) * typeEffectiveness * critical;
         
         float a = (2 * attacker.Level + 10) / 250f;
         
@@ -150,19 +178,27 @@ public class Pokemon
         int damage = Mathf.FloorToInt(d * modifiers);
         Debug.Log(damage);
 
-        Hp -= damage;
+        UpdateHp(damage);
 
-        if (Hp <= 0)
-        {
-            Hp = 0;
-            damageDetails.Fainted = true;
-        }
         return damageDetails;
+    }
+
+    public bool OnBeforeTurn()
+    {
+        if(Status?.OnBeforeMove!=null)
+            return Status.OnBeforeMove(this);
+
+        return true;
+    }
+
+    public void OnAfterTurn()
+    {
+        Status?.OnAfterTurn?.Invoke(this);
     }
 
     public Move GetRandomMove()
     {
-        int r = Random.Range(0, moves.Count);
+        int r = UnityEngine.Random.Range(0, moves.Count);
         return moves[r];
     }
 
