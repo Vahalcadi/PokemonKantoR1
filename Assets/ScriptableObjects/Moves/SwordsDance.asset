@@ -17,10 +17,13 @@ MonoBehaviour:
   type: 9
   power: 0
   accuracy: 0
+  alwaysHits: 1
   pp: 20
   moveCategory: 2
   moveEffects:
     boosts:
     - stat: 0
       boost: 2
+    status: 0
+  secondaryEffects: []
   target: 1

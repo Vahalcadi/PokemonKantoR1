@@ -17,4 +17,11 @@ MonoBehaviour:
   type: 9
   power: 40
   accuracy: 100
+  alwaysHits: 1
   pp: 30
+  moveCategory: 0
+  moveEffects:
+    boosts: []
+    status: 0
+  secondaryEffects: []
+  target: 0

@@ -16,5 +16,12 @@ MonoBehaviour:
   description: 
   type: 2
   power: 30
-  accuracy: 10
+  accuracy: 100
+  alwaysHits: 1
   pp: 15
+  moveCategory: 0
+  moveEffects:
+    boosts: []
+    status: 0
+  secondaryEffects: []
+  target: 0

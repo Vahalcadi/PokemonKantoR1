@@ -30,7 +30,10 @@ public enum Stat
     Defence,
     SpAttack,
     SpDefence,
-    Speed
+    Speed,
+    
+    Accuracy,
+    Evasion
 }
 
 [CreateAssetMenu]

@@ -12,10 +12,12 @@ public class MovesSO : ScriptableObject
     public Type type;
     public int power;
     public int accuracy;
+    public bool alwaysHits;
     public int pp;
     public MoveCategory moveCategory;
     public MoveEffects moveEffects;
-    public MoveTarget target;
+    public List<SecondaryEffects> secondaryEffects;
+    public MoveTarget target;    
 }
 
 [System.Serializable]
@@ -33,6 +35,16 @@ public class StatBoost
 {
     public Stat stat;
     public int boost;
+}
+
+[System.Serializable]
+public class SecondaryEffects : MoveEffects
+{
+    [SerializeField] int chance;
+    [SerializeField] MoveTarget target;
+
+    public int Chance { get { return chance; } }
+    public MoveTarget Target { get { return target; } }
 }
 
 public enum MoveCategory

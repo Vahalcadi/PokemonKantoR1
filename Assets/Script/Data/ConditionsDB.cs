@@ -35,7 +35,10 @@ public class ConditionsDB
                 StartMessage = "has been poisoned", 
                 OnAfterTurn = (Pokemon pokemon) => 
                 {
-                    pokemon.UpdateHp(pokemon.MaxHp / 8);
+                    if(Mathf.Clamp(pokemon.MaxHp / 8, 0, pokemon.MaxHp) <= 0)
+                        pokemon.UpdateHp(1);
+                    else
+                        pokemon.UpdateHp(pokemon.MaxHp / 8);
                     pokemon.StatusChanges.Enqueue($"{pokemon.PokemonSO.name} is hurt due to poison");
                 } 
             }         
@@ -50,7 +53,10 @@ public class ConditionsDB
                 StartMessage = "has been burned",
                 OnAfterTurn = (Pokemon pokemon) =>
                 {
-                    pokemon.UpdateHp(pokemon.MaxHp / 16);
+                    if(Mathf.Clamp(pokemon.MaxHp / 16, 0, pokemon.MaxHp) <= 0)
+                        pokemon.UpdateHp(1);
+                    else
+                        pokemon.UpdateHp(pokemon.MaxHp / 16);
                     pokemon.StatusChanges.Enqueue($"{pokemon.PokemonSO.name} is hurt due to burn");
                 }
             }
