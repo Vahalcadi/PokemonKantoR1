@@ -28,6 +28,8 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private BattleDialogBox dialogBox;
     [SerializeField] private PartyScreen partyScreen;
 
+    private int escapeAttempts;
+
     public event Action<bool> OnBattleOver;
 
     private BattleState state;
@@ -65,6 +67,8 @@ public class BattleSystem : MonoBehaviour
 
         dialogBox.SetDialog($"A wild {enemyUnit.Pokemon.PokemonSO.name} appear");
         yield return new WaitForSeconds(2);
+
+        escapeAttempts = 0;
 
         ActionSelection();
     }
@@ -105,7 +109,12 @@ public class BattleSystem : MonoBehaviour
     public void RunSelected()
     {
         if (state == BattleState.ActionSelection)
-            Debug.Log("run");
+        {
+            dialogBox.EnableActionSelector(false);
+            dialogBox.EnableDialogueText(true);
+            dialogBox.EnableMoveSelector(false);
+            StartCoroutine(RunTurns(BattleAction.Run, -1, -1));
+        }
     }
     public void GoBackToActionSelection()
     {
@@ -249,6 +258,10 @@ public class BattleSystem : MonoBehaviour
                 var selectedPokemon = playerParty.Pokemons[indexOfPokemon];
                 state = BattleState.Busy;
                 yield return SwitchPokemon(selectedPokemon);
+            }
+            else if (playerAction == BattleAction.Run)
+            {
+                yield return TryToRun();
             }
             var enemyMove = enemyUnit.Pokemon.GetRandomMove();
             yield return RunMove(enemyUnit, playerUnit, enemyMove);
@@ -439,4 +452,38 @@ public class BattleSystem : MonoBehaviour
             BattleOver(true);
     }
 
+    private IEnumerator TryToRun()
+    {
+        state = BattleState.Busy;
+
+        escapeAttempts++;
+
+        int playerSpeed = playerUnit.Pokemon.Speed;
+        int enemySpeed = enemyUnit.Pokemon.Speed;
+
+        if (enemySpeed < playerSpeed)
+        {
+            dialogBox.SetDialog($"Player ran away");
+            yield return new WaitForSeconds(1.5f);
+            BattleOver(true);
+        }
+        else
+        {
+            float f = (playerSpeed * 128) / enemySpeed + 30 * escapeAttempts;
+            f = f % 256;
+
+            if (UnityEngine.Random.Range(0, 256) < f)
+            {
+                dialogBox.SetDialog($"Player ran away");
+                yield return new WaitForSeconds(1.5f);
+                BattleOver(true);
+            }
+            else
+            {
+                dialogBox.SetDialog($"Player failed to escape!");
+                yield return new WaitForSeconds(1.5f);
+                state = BattleState.RunningTurn;
+            }
+        }
+    }
 }
