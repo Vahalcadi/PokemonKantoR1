@@ -10,6 +10,7 @@ public enum BattleState
     RunningTurn,
     Busy,
     PartyScreen,
+    Bag,
     BattleOver
 }
 
@@ -27,6 +28,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private BattleUnit enemyUnit;
     [SerializeField] private BattleDialogBox dialogBox;
     [SerializeField] private PartyScreen partyScreen;
+    [SerializeField] private InventoryUI inventoryUI;
 
     private int escapeAttempts;
 
@@ -83,9 +85,16 @@ public class BattleSystem : MonoBehaviour
 
     private void OpenPartyScreen()
     {
+        prevState = state;
         state = BattleState.PartyScreen;
         partyScreen.SetPartyData(playerParty.Pokemons);
         partyScreen.gameObject.SetActive(true);
+    }
+
+    private void OpenBagScreen()
+    {
+        state = BattleState.Bag;
+        inventoryUI.gameObject.SetActive(true);
     }
 
     public void FightSelected()
@@ -93,18 +102,17 @@ public class BattleSystem : MonoBehaviour
         if (state == BattleState.ActionSelection)
             MoveSelection();
     }
+
     public void BagSelected()
     {
         if (state == BattleState.ActionSelection)
-            Debug.Log("accessing bag");
+            OpenBagScreen();
     }
     public void PokemonSelected()
     {
         if (state == BattleState.ActionSelection)
-        {
-            prevState = state;
             OpenPartyScreen();
-        }
+        
     }
     public void RunSelected()
     {
@@ -118,9 +126,12 @@ public class BattleSystem : MonoBehaviour
     }
     public void GoBackToActionSelection()
     {
+        inventoryUI.gameObject.SetActive(false);
         partyScreen.gameObject.SetActive(false);
         dialogBox.EnableMoveSelector(false);
         dialogBox.EnableDialogueText(true);
+        prevState = null;
+
         ActionSelection();
     }
 
@@ -170,15 +181,14 @@ public class BattleSystem : MonoBehaviour
         partyScreen.gameObject.SetActive(false);
 
         if (prevState == BattleState.ActionSelection)
-        {
-            prevState = null;
-            StartCoroutine(RunTurns(BattleAction.SwitchPokemon, -1, indexOfPokemon));
-        }
+            StartCoroutine(RunTurns(BattleAction.SwitchPokemon, -1, indexOfPokemon)); 
         else
         {
             state = BattleState.Busy;
             StartCoroutine(SwitchPokemon(selectedMember));
         }
+
+        prevState = null;
     }
 
     private IEnumerator SwitchPokemon(Pokemon newPokemon)

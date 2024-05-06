@@ -60,9 +60,15 @@ public class Pokemon
         OnStatusChanged?.Invoke();
     }
 
-    public void UpdateHp(int damage)
+    public void DecreaseHp(int damage)
     {
         Hp = Mathf.Clamp(Hp - damage, 0, MaxHp);
+        HpChanged = true;
+    }
+
+    public void IncreaseHp(int amount)
+    {
+        Hp = Mathf.Clamp(Hp + amount, 0, MaxHp);
         HpChanged = true;
     }
 
@@ -182,7 +188,7 @@ public class Pokemon
         int damage = Mathf.FloorToInt(d * modifiers);
         Debug.Log(damage);
 
-        UpdateHp(damage);
+        DecreaseHp(damage);
 
         return damageDetails;
     }

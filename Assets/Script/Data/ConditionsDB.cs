@@ -36,9 +36,9 @@ public class ConditionsDB
                 OnAfterTurn = (Pokemon pokemon) => 
                 {
                     if(Mathf.Clamp(pokemon.MaxHp / 8, 0, pokemon.MaxHp) <= 0)
-                        pokemon.UpdateHp(1);
+                        pokemon.DecreaseHp(1);
                     else
-                        pokemon.UpdateHp(pokemon.MaxHp / 8);
+                        pokemon.DecreaseHp(pokemon.MaxHp / 8);
                     pokemon.StatusChanges.Enqueue($"{pokemon.PokemonSO.name} is hurt due to poison");
                 } 
             }         
@@ -54,9 +54,9 @@ public class ConditionsDB
                 OnAfterTurn = (Pokemon pokemon) =>
                 {
                     if(Mathf.Clamp(pokemon.MaxHp / 16, 0, pokemon.MaxHp) <= 0)
-                        pokemon.UpdateHp(1);
+                        pokemon.DecreaseHp(1);
                     else
-                        pokemon.UpdateHp(pokemon.MaxHp / 16);
+                        pokemon.DecreaseHp(pokemon.MaxHp / 16);
                     pokemon.StatusChanges.Enqueue($"{pokemon.PokemonSO.name} is hurt due to burn");
                 }
             }

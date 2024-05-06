@@ -31,4 +31,6 @@ public class PartyScreen : MonoBehaviour
     {
         this.message.text = message;
     }
+
+
 }
