@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class BattleDialogBox : MonoBehaviour
 {
@@ -46,7 +44,7 @@ public class BattleDialogBox : MonoBehaviour
                 moveButtons[i].gameObject.SetActive(true);
             }
             else
-                moveButtons[i].gameObject.SetActive(false);           
+                moveButtons[i].gameObject.SetActive(false);
         }
     }
 
@@ -54,5 +52,13 @@ public class BattleDialogBox : MonoBehaviour
     {
         ppText.text = $"PP {move.pp}/{move.moveSO.pp}";
         typeText.text = $"{move.moveSO.type}";
+
+        if (move.pp <= 0)
+            ppText.color = Color.red;
+        else if (move.pp <= Mathf.FloorToInt(move.moveSO.pp / 2))
+            ppText.color = new Color(1, 0.647f, 0);
+        else
+            ppText.color = Color.black;
+
     }
 }

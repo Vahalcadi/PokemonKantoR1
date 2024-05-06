@@ -5,6 +5,10 @@ public class TilemapPlayer : MonoBehaviour
     public Rigidbody2D rb;
     public float speed;
     public bool engagedInCombat;
+    [SerializeField] private Animator anim;
+    bool WalkUp;
+    bool WalkRight;
+    bool Idle;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,8 +48,12 @@ public class TilemapPlayer : MonoBehaviour
         //Debug.Log(yAxis);
 
         Vector2 direction = InputManager.Instance.Movement().normalized;
+
+        anim.SetFloat("RightDir", direction.x);
+        anim.SetFloat("UpDir", direction.y);
+
         rb.velocity = direction * speed;
     }
 
-    
+
 }

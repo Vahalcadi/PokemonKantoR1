@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,10 +13,11 @@ public class MovesSO : ScriptableObject
     public int accuracy;
     public bool alwaysHits;
     public int pp;
+    public int priority;
     public MoveCategory moveCategory;
     public MoveEffects moveEffects;
     public List<SecondaryEffects> secondaryEffects;
-    public MoveTarget target;    
+    public MoveTarget target;
 }
 
 [System.Serializable]

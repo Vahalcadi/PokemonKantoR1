@@ -19,6 +19,7 @@ MonoBehaviour:
   accuracy: 100
   alwaysHits: 1
   pp: 30
+  priority: 1
   moveCategory: 0
   moveEffects:
     boosts: []

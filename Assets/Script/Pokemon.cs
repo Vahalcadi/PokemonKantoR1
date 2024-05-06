@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -16,7 +17,7 @@ public class Pokemon
     public Move CurrentMove { get; set; }
     public Dictionary<Stat, int> Stats { get; private set; }
     public Dictionary<Stat, int> StatBoosts { get; private set; }
-    public Condition Status { get; private set; } 
+    public Condition Status { get; private set; }
     public int StatusTime { get; set; }
 
     public Queue<string> StatusChanges { get; private set; } = new Queue<string>();
@@ -168,9 +169,9 @@ public class Pokemon
             Fainted = false
         };
         float modifiers = UnityEngine.Random.Range(0.85f, 1f) * typeEffectiveness * critical;
-        
+
         float a = (2 * attacker.Level + 10) / 250f;
-        
+
         float d;
 
         if (move.moveSO.moveCategory == MoveCategory.Special)
@@ -188,7 +189,7 @@ public class Pokemon
 
     public bool OnBeforeTurn()
     {
-        if(Status?.OnBeforeMove!=null)
+        if (Status?.OnBeforeMove != null)
             return Status.OnBeforeMove(this);
 
         return true;
@@ -201,8 +202,10 @@ public class Pokemon
 
     public Move GetRandomMove()
     {
-        int r = UnityEngine.Random.Range(0, moves.Count);
-        return moves[r];
+        var movesWithPP = moves.Where(x => x.pp > 0).ToList();
+
+        int r = UnityEngine.Random.Range(0, movesWithPP.Count);
+        return movesWithPP[r];
     }
 
     public void OnBattleOver()
