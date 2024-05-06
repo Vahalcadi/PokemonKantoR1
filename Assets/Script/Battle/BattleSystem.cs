@@ -132,9 +132,9 @@ public class BattleSystem : MonoBehaviour
 
         dialogBox.EnableMoveSelector(false);
         dialogBox.EnableDialogueText(true);
-        StartCoroutine(RunTurns(BattleAction.Move,indexOfMove,-1));
+        StartCoroutine(RunTurns(BattleAction.Move, indexOfMove, -1));
     }
-   
+
     #endregion
 
     #region switch pokemons
@@ -205,7 +205,10 @@ public class BattleSystem : MonoBehaviour
             playerUnit.Pokemon.CurrentMove = playerUnit.Pokemon.moves[indexOfMove];
             enemyUnit.Pokemon.CurrentMove = enemyUnit.Pokemon.GetRandomMove();
 
-            bool playerGoesFirst = playerUnit.Pokemon.Speed >= enemyUnit.Pokemon.Speed;
+            bool playerGoesFirst = playerUnit.Pokemon.Speed > enemyUnit.Pokemon.Speed;
+
+            if (playerUnit.Pokemon.Speed == enemyUnit.Pokemon.Speed)
+                playerGoesFirst = UnityEngine.Random.Range(1, 3) == 1;
 
             var firstUnit = (playerGoesFirst) ? playerUnit : enemyUnit;
             var secondUnit = (playerGoesFirst) ? enemyUnit : playerUnit;
@@ -224,7 +227,7 @@ public class BattleSystem : MonoBehaviour
                 yield return RunMove(secondUnit, firstUnit, secondUnit.Pokemon.CurrentMove);
                 yield return RunAfterTurn(secondUnit);
             }
-            
+
         }
         else
         {
@@ -298,7 +301,7 @@ public class BattleSystem : MonoBehaviour
                 yield return ShowDamageDetails(damageDetails);
             }
 
-            if(move.moveSO.secondaryEffects != null && move.moveSO.secondaryEffects.Count > 0 && targetUnit.Pokemon.Hp > 0)
+            if (move.moveSO.secondaryEffects != null && move.moveSO.secondaryEffects.Count > 0 && targetUnit.Pokemon.Hp > 0)
             {
                 foreach (var effect in move.moveSO.secondaryEffects)
                 {
@@ -318,13 +321,13 @@ public class BattleSystem : MonoBehaviour
                 CheckForBattleOver(targetUnit);
             }
 
-            
+
         }
         else
         {
             dialogBox.SetDialog($"{sourceUnit.Pokemon.PokemonSO.name}'s attack missed");
             yield return new WaitForSeconds(1.5f);
-        } 
+        }
     }
 
     IEnumerator RunAfterTurn(BattleUnit sourceUnit)
@@ -367,7 +370,7 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator ShowStatusChanges(Pokemon pokemon)
     {
-        while(pokemon.StatusChanges.Count > 0)
+        while (pokemon.StatusChanges.Count > 0)
         {
             var message = pokemon.StatusChanges.Dequeue();
             dialogBox.SetDialog(message);
@@ -396,7 +399,7 @@ public class BattleSystem : MonoBehaviour
             Debug.Log("Not Effective");
             yield return new WaitForSeconds(1.5f);
         }
-            
+
     }
 
 
@@ -420,7 +423,7 @@ public class BattleSystem : MonoBehaviour
                 BattleOver(false);
         }
         else
-            BattleOver(true);    
+            BattleOver(true);
     }
 
 }
