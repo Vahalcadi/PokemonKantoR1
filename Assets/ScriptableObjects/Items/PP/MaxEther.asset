@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0613c46598c729f459734697b3aab613, type: 3}
   m_Name: MaxEther
   m_EditorClassIdentifier: 
+  itemID: 4
   name: Max Ether
   description: "Fully restores the PP of a selected move.\r"
   icon: {fileID: 21300000, guid: fd0749f90e9571f429f5798adb459ee8, type: 3}

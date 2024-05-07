@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0613c46598c729f459734697b3aab613, type: 3}
   m_Name: MoomooMilk
   m_EditorClassIdentifier: 
+  itemID: 8
   name: Moomoo Milk
   description: Restores HP that have been lost in battle by 100 HP.
   icon: {fileID: 21300000, guid: 98c8ab03f85cb63459d3462095a94a8b, type: 3}

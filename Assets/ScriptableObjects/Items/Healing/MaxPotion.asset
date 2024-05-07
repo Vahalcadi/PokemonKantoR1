@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0613c46598c729f459734697b3aab613, type: 3}
   m_Name: MaxPotion
   m_EditorClassIdentifier: 
+  itemID: 1
   name: Max Potion
   description: Fully restores the HP of a Pokemon.
   icon: {fileID: 21300000, guid: 58c9dc975cf23e84986305a2002c88c5, type: 3}

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0613c46598c729f459734697b3aab613, type: 3}
   m_Name: HyperPotion
   m_EditorClassIdentifier: 
+  itemID: 2
   name: Hyper Potion
   description: Restores HP that have been lost in battle by 200 HP.
   icon: {fileID: 21300000, guid: 22eedb27aa5cea6429ee8d43e470a9c4, type: 3}
