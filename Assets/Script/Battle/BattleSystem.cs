@@ -112,7 +112,7 @@ public class BattleSystem : MonoBehaviour
     {
         if (state == BattleState.ActionSelection)
             OpenPartyScreen();
-        
+
     }
     public void RunSelected()
     {
@@ -136,6 +136,14 @@ public class BattleSystem : MonoBehaviour
     }
 
     #endregion
+
+    public void ConfirmItem(int itemId)
+    {
+        if (state != BattleState.Bag)
+            return;
+
+        inventoryUI.UseItem(itemId, playerUnit.Pokemon);
+    }
 
     #region player moves
     private void MoveSelection()
@@ -181,7 +189,7 @@ public class BattleSystem : MonoBehaviour
         partyScreen.gameObject.SetActive(false);
 
         if (prevState == BattleState.ActionSelection)
-            StartCoroutine(RunTurns(BattleAction.SwitchPokemon, -1, indexOfPokemon)); 
+            StartCoroutine(RunTurns(BattleAction.SwitchPokemon, -1, indexOfPokemon));
         else
         {
             state = BattleState.Busy;
@@ -216,6 +224,7 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.RunningTurn;
     }
     #endregion
+
 
 
     public IEnumerator RunTurns(BattleAction playerAction, int indexOfMove, int indexOfPokemon)
@@ -273,6 +282,7 @@ public class BattleSystem : MonoBehaviour
             {
                 yield return TryToRun();
             }
+
             var enemyMove = enemyUnit.Pokemon.GetRandomMove();
             yield return RunMove(enemyUnit, playerUnit, enemyMove);
             yield return RunAfterTurn(enemyUnit);

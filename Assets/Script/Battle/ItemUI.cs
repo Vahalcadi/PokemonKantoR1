@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI countText;
@@ -11,6 +11,8 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private string description;
     [SerializeField] private Image arrowPointer;
     private TextMeshProUGUI descriptionBox;
+
+    public int Index { get; private set; }
 
     private void Start()
     {
@@ -29,6 +31,7 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         countText.text = $"x {itemSlot.Count}";
         image.sprite = itemSlot.Item.icon;
         description = itemSlot.Item.description;
+        Index = itemSlot.Index;
     }
 
     public void SetDescriptionBox(TextMeshProUGUI descriptionBox)
@@ -44,5 +47,10 @@ public class ItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private void OnDisable()
     {
         arrowPointer.enabled = false;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        BattleSystem.instance.ConfirmItem(Index);
     }
 }

@@ -9,7 +9,10 @@ public enum ItemID
     MaxEther,
     Antidote,
     Revive,
-    MaxRevive
+    MaxRevive,
+    MoomooMilk,
+    SitrusBerry,
+    Awakening
 }
 
 public class ItemSO : ScriptableObject

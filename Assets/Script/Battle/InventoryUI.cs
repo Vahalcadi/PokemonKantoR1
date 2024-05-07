@@ -21,6 +21,11 @@ public class InventoryUI : MonoBehaviour
         UpdateItemList();
     }
 
+    public void UseItem(int currentItemId, Pokemon pokemon)
+    {
+        inventory.UseItem(currentItemId, pokemon);
+    }
+
     public void UpdateDescription(string description)
     {
         itemDescription.text = description;
