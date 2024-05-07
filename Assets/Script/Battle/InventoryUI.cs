@@ -14,6 +14,8 @@ public class InventoryUI : MonoBehaviour
     private void Awake()
     {
         inventory = Inventory.GetInventory();
+
+        inventory.OnUpdated += UpdateItemList;
     }
 
     private void Start()
@@ -21,9 +23,14 @@ public class InventoryUI : MonoBehaviour
         UpdateItemList();
     }
 
-    public void UseItem(int currentItemId, Pokemon pokemon)
+    public bool UseItem(int currentItemId, Pokemon pokemon)
     {
-        inventory.UseItem(currentItemId, pokemon);
+        var item = inventory.UseItem(currentItemId, pokemon);
+
+        if (item != null)
+            return true;
+
+        return false;
     }
 
     public void UpdateDescription(string description)

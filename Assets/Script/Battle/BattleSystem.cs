@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public enum BattleState
 {
@@ -121,7 +122,7 @@ public class BattleSystem : MonoBehaviour
             dialogBox.EnableActionSelector(false);
             dialogBox.EnableDialogueText(true);
             dialogBox.EnableMoveSelector(false);
-            StartCoroutine(RunTurns(BattleAction.Run, -1, -1));
+            StartCoroutine(RunTurns(BattleAction.Run, -1, -1, -1));
         }
     }
     public void GoBackToActionSelection()
@@ -142,7 +143,10 @@ public class BattleSystem : MonoBehaviour
         if (state != BattleState.Bag)
             return;
 
-        inventoryUI.UseItem(itemId, playerUnit.Pokemon);
+        dialogBox.EnableActionSelector(false);
+        dialogBox.EnableMoveSelector(false);
+        dialogBox.EnableDialogueText(true);
+        StartCoroutine(RunTurns(BattleAction.UseItem, -1, -1, itemId));
     }
 
     #region player moves
@@ -163,7 +167,7 @@ public class BattleSystem : MonoBehaviour
 
         dialogBox.EnableMoveSelector(false);
         dialogBox.EnableDialogueText(true);
-        StartCoroutine(RunTurns(BattleAction.Move, indexOfMove, -1));
+        StartCoroutine(RunTurns(BattleAction.Move, indexOfMove, -1, -1));
     }
 
     #endregion
@@ -189,7 +193,7 @@ public class BattleSystem : MonoBehaviour
         partyScreen.gameObject.SetActive(false);
 
         if (prevState == BattleState.ActionSelection)
-            StartCoroutine(RunTurns(BattleAction.SwitchPokemon, -1, indexOfPokemon));
+            StartCoroutine(RunTurns(BattleAction.SwitchPokemon, -1, indexOfPokemon, -1));
         else
         {
             state = BattleState.Busy;
@@ -226,8 +230,7 @@ public class BattleSystem : MonoBehaviour
     #endregion
 
 
-
-    public IEnumerator RunTurns(BattleAction playerAction, int indexOfMove, int indexOfPokemon)
+    public IEnumerator RunTurns(BattleAction playerAction, int indexOfMove, int indexOfPokemon, int idOfItem)
     {
         state = BattleState.RunningTurn;
 
@@ -282,7 +285,28 @@ public class BattleSystem : MonoBehaviour
             {
                 yield return TryToRun();
             }
+            else if (playerAction == BattleAction.UseItem)
+            {
+                state = BattleState.Busy;
+                bool itemUsed = inventoryUI.UseItem(idOfItem, playerUnit.Pokemon);
+                inventoryUI.gameObject.SetActive(false);
 
+                if (itemUsed)
+                {
+                    dialogBox.SetDialog($"Player successfully used an item on {playerUnit.Pokemon}");
+                    yield return new WaitForSeconds(1.5f);
+                    state = BattleState.RunningTurn;
+                    yield return playerUnit.Hud.UpdateHP();
+                }
+                else
+                {
+                    dialogBox.SetDialog($"Player cannot use the item right now");
+                    yield return new WaitForSeconds(1.5f);
+
+                    ActionSelection();
+                    yield break;
+                }               
+            }
             var enemyMove = enemyUnit.Pokemon.GetRandomMove();
             yield return RunMove(enemyUnit, playerUnit, enemyMove);
             yield return RunAfterTurn(enemyUnit);

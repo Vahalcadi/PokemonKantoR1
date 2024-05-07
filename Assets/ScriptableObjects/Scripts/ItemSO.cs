@@ -12,7 +12,10 @@ public enum ItemID
     MaxRevive,
     MoomooMilk,
     SitrusBerry,
-    Awakening
+    Awakening,
+    BurnHeal,
+    IceHeal,
+    ParaliseHeal
 }
 
 public class ItemSO : ScriptableObject

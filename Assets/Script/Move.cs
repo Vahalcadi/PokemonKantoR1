@@ -12,4 +12,9 @@ public class Move
         this.moveSO = move;
         pp = move.pp;
     }
+
+    public void IncreasePP(int amount)
+    {
+        pp = Mathf.Clamp(pp + amount, 0, moveSO.pp);
+    }
 }

@@ -58,7 +58,7 @@ public class BattleHud : MonoBehaviour
     {
         if (pokemon.HpChanged)
         {
-            yield return hpSlider.SetCurrentHP(pokemon.Hp);
+            yield return hpSlider.UpdateHpAsync(pokemon.Hp);
             pokemon.HpChanged = false;
         }
     }

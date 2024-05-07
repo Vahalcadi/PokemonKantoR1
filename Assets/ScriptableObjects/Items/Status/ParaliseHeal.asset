@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0613c46598c729f459734697b3aab613, type: 3}
-  m_Name: Revive
+  m_Name: ParaliseHeal
   m_EditorClassIdentifier: 
-  itemID: 6
-  name: Revive
-  description: Revives a fainted Pokemon with half its HP.
-  icon: {fileID: 21300000, guid: d9eaf41faf12d014b97abddd46a8909f, type: 3}
+  itemID: 13
+  name: Paralise Heal
+  description: Cures a Pokemon that is suffering from paralysis.
+  icon: {fileID: 21300000, guid: 730e9e0e81c074141bd1fb941ecd5b46, type: 3}
   hpAmount: 0
   restoreMaxHp: 0
   ppAmount: 0
   restoreMaxPp: 0
-  status: 0
+  status: 4
   recoverAllStatus: 0
-  revive: 1
+  revive: 0
   maxRevive: 0

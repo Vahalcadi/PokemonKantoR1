@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,6 +7,8 @@ public class Inventory : MonoBehaviour
 {
     [SerializeField] List<ItemSlot> items;
     public List<ItemSlot> Items => items;
+
+    public event Action OnUpdated;
 
     public ItemSO UseItem(int itemIndex, Pokemon selectedPokemon)
     {
@@ -27,6 +30,8 @@ public class Inventory : MonoBehaviour
 
         if (itemSlot.Count == 0)
             items.Remove(itemSlot);
+
+        OnUpdated?.Invoke();
     }
 
     public static Inventory GetInventory()

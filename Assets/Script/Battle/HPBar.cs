@@ -12,16 +12,31 @@ public class HPBar : MonoBehaviour
         hpSlider.value = currentHp;
     }
 
-    public IEnumerator SetCurrentHP(int newHp)
+    public IEnumerator UpdateHpAsync(int newHp)
     {
         float currentHP = hpSlider.value;
-        float changeAmount = currentHP - newHp;
-
-        while (currentHP - newHp > Mathf.Epsilon)
+        
+        if (newHp < currentHP)
         {
-            currentHP -= changeAmount * Time.deltaTime;
-            hpSlider.value = currentHP;
-            yield return null;
+            float changeAmount = currentHP - newHp;
+
+            while (currentHP - newHp > Mathf.Epsilon)
+            {
+                currentHP -= changeAmount * Time.deltaTime;
+                hpSlider.value = currentHP;
+                yield return null;
+            }
+        }
+        else
+        {
+            float changeAmount = newHp - currentHP;
+
+            while (newHp - currentHP > Mathf.Epsilon)
+            {
+                currentHP += changeAmount * Time.deltaTime;
+                hpSlider.value = currentHP;
+                yield return null;
+            }           
         }
         hpSlider.value = newHp;
     }
