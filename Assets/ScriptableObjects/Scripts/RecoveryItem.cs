@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu]
 public class RecoveryItem : ItemSO
 {
     [Header("HP")]
@@ -24,7 +23,7 @@ public class RecoveryItem : ItemSO
     {
         if (hpAmount > 0)
         {
-            if(pokemon.Hp == pokemon.MaxHp)
+            if (pokemon.Hp == pokemon.MaxHp)
                 return false;
 
             pokemon.IncreaseHp(hpAmount);

@@ -1,11 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+public enum ItemID
+{
+    Potion,
+    MaxPotion,
+    HyperPotion,
+    Ether,
+    MaxEther,
+    Antidote,
+    Revive,
+    MaxRevive
+}
+
 public class ItemSO : ScriptableObject
 {
+    public ItemID itemID;
     new public string name;
+    [TextArea]
     public string description;
     public Sprite icon;
 
