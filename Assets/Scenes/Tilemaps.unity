@@ -5479,6 +5479,17 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &636897076 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2973863203115679467, guid: 81f8ba74ff07cfb459b659bbec637595, type: 3}
+  m_PrefabInstance: {fileID: 2454642068358411247}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &638642169
 GameObject:
   m_ObjectHideFlags: 0
@@ -13356,6 +13367,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6642547183958231260, guid: 81f8ba74ff07cfb459b659bbec637595, type: 3}
+      propertyPath: PartyScreenBackButton
+      value: 
+      objectReference: {fileID: 636897076}
     - target: {fileID: 6762781356872352402, guid: 81f8ba74ff07cfb459b659bbec637595, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

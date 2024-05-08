@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum BattleState
 {
@@ -29,6 +30,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private BattleDialogBox dialogBox;
     [SerializeField] private PartyScreen partyScreen;
     [SerializeField] private InventoryUI inventoryUI;
+    [SerializeField] private Button PartyScreenBackButton;
 
     private int escapeAttempts;
 
@@ -111,7 +113,10 @@ public class BattleSystem : MonoBehaviour
     public void PokemonSelected()
     {
         if (state == BattleState.ActionSelection)
+        {
+            PartyScreenBackButton.gameObject.SetActive(true);
             OpenPartyScreen();
+        }
 
     }
     public void RunSelected()
@@ -500,6 +505,7 @@ public class BattleSystem : MonoBehaviour
             var nextPokemon = playerParty.GetAlivePokemon();
             if (nextPokemon != null)
             {
+                PartyScreenBackButton.gameObject.SetActive(false);
                 OpenPartyScreen();
             }
             else

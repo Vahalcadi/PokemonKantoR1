@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TilemapPlayer : MonoBehaviour
 {
@@ -6,9 +7,7 @@ public class TilemapPlayer : MonoBehaviour
     public float speed;
     public bool engagedInCombat;
     [SerializeField] private Animator anim;
-    bool WalkUp;
-    bool WalkRight;
-    bool Idle;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +18,9 @@ public class TilemapPlayer : MonoBehaviour
     void Update()
     {
         Movement();
+
+        if (Input.GetKeyDown(KeyCode.K))
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
