@@ -183,7 +183,12 @@ public class Pokemon
         if (move.moveSO.moveCategory == MoveCategory.Special)
             d = a * move.moveSO.power * ((float)attacker.SpAttack / SpDefence) + 2;
         else
-            d = a * move.moveSO.power * ((float)attacker.Attack / Defence) + 2;
+        {
+            if (attacker.Status == ConditionsDB.Conditions[ConditionID.brn])
+                d = a * move.moveSO.power * ((float)(attacker.Attack / 2) / Defence) + 2;
+            else
+                d = a * move.moveSO.power * ((float)attacker.Attack / Defence) + 2;
+        }
 
         int damage = Mathf.FloorToInt(d * modifiers);
         Debug.Log(damage);

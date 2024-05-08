@@ -31,4 +31,4 @@ MonoBehaviour:
   - moveSO: {fileID: 11400000, guid: 32fc5e4de15330f448806a672ca43683, type: 2}
     level: 1
   - moveSO: {fileID: 11400000, guid: 16f437cd2e17ad2468303884da439169, type: 2}
-    level: 9
+    level: 1

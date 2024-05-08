@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271319b851ad31044b78191b6d6d22da, type: 3}
+  m_Name: Dragonite
+  m_EditorClassIdentifier: 
+  name: Dragonite
+  frontSprite: {fileID: 21300000, guid: 42273733fd4184c42a17ab35cc97b140, type: 3}
+  backSprite: {fileID: 21300000, guid: 2cb3ed7fcbeab29459d7c5b7de3cbe77, type: 3}
+  type1: 5
+  type2: 13
+  maxHp: 91
+  attack: 134
+  defence: 95
+  specialAttack: 100
+  specialDefence: 100
+  speed: 80
+  learnableMoves:
+  - moveSO: {fileID: 11400000, guid: 4fb951756f0050348a6917f5e5f89403, type: 2}
+    level: 1
+  - moveSO: {fileID: 11400000, guid: acf4f0299d67879409c1a0b55b7f7286, type: 2}
+    level: 1
+  - moveSO: {fileID: 11400000, guid: 37a0647e3469cec4681ea14740550ab9, type: 2}
+    level: 1
+  - moveSO: {fileID: 11400000, guid: 35aed23dcb8e8b54fa20362da6d5b35f, type: 2}
+    level: 1

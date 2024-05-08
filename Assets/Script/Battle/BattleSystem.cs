@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public enum BattleState
 {
@@ -244,14 +243,26 @@ public class BattleSystem : MonoBehaviour
 
             bool playerGoesFirst = true;
 
+
+
             if (enemyMovePriority > playerMovePriority)
                 playerGoesFirst = false;
+
             else if (enemyMovePriority == playerMovePriority)
             {
-                if (playerUnit.Pokemon.Speed == enemyUnit.Pokemon.Speed)
+                int playerPokemonSpeed = playerUnit.Pokemon.Speed;
+                int enemyPokemonSpeed = enemyUnit.Pokemon.Speed;
+
+                if (playerUnit.Pokemon.Status == ConditionsDB.Conditions[ConditionID.par])
+                    playerPokemonSpeed = Mathf.FloorToInt(playerPokemonSpeed / 2);
+
+                if (playerUnit.Pokemon.Status == ConditionsDB.Conditions[ConditionID.par])
+                    enemyPokemonSpeed = Mathf.FloorToInt(enemyPokemonSpeed / 2);
+
+                if (playerPokemonSpeed == enemyPokemonSpeed)
                     playerGoesFirst = UnityEngine.Random.Range(1, 3) == 1;
                 else
-                    playerGoesFirst = playerUnit.Pokemon.Speed > enemyUnit.Pokemon.Speed;
+                    playerGoesFirst = playerPokemonSpeed > enemyPokemonSpeed;
             }
 
             var firstUnit = (playerGoesFirst) ? playerUnit : enemyUnit;
@@ -305,7 +316,7 @@ public class BattleSystem : MonoBehaviour
 
                     ActionSelection();
                     yield break;
-                }               
+                }
             }
             var enemyMove = enemyUnit.Pokemon.GetRandomMove();
             yield return RunMove(enemyUnit, playerUnit, enemyMove);
@@ -477,6 +488,8 @@ public class BattleSystem : MonoBehaviour
     {
         state = BattleState.BattleOver;
         playerParty.Pokemons.ForEach(p => p.OnBattleOver());
+        enemyUnit.Pokemon.OnBattleOver();
+        enemyUnit.Pokemon.CureStatus();
         OnBattleOver(won);
     }
 

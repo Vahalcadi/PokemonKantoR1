@@ -11551,9 +11551,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemons:
   - pokemonSO: {fileID: 11400000, guid: 1af731a0b3eeeb7408556eb14e98c936, type: 2}
-    level: 7
+    level: 50
   - pokemonSO: {fileID: 11400000, guid: 5193543725732ce44add0db142e6cafd, type: 2}
-    level: 2
+    level: 50
+  - pokemonSO: {fileID: 11400000, guid: f3c75f1522da0f74886324ffd183b60d, type: 2}
+    level: 50
+  - pokemonSO: {fileID: 11400000, guid: 139c9b81eb8d03246b06cad25c62f365, type: 2}
+    level: 50
+  - pokemonSO: {fileID: 11400000, guid: b8682f5b014a6c246aa9e3e88b3ab959, type: 2}
+    level: 50
+  - pokemonSO: {fileID: 11400000, guid: e6e7d4d9a303e1f4a8254fbe120bb663, type: 2}
+    level: 50
 --- !u!70 &1089204036
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -12845,9 +12853,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wildPokemons:
   - pokemonSO: {fileID: 11400000, guid: 1af731a0b3eeeb7408556eb14e98c936, type: 2}
-    level: 2
+    level: 40
   - pokemonSO: {fileID: 11400000, guid: 5193543725732ce44add0db142e6cafd, type: 2}
-    level: 3
+    level: 60
+  - pokemonSO: {fileID: 11400000, guid: f3c75f1522da0f74886324ffd183b60d, type: 2}
+    level: 50
+  - pokemonSO: {fileID: 11400000, guid: 139c9b81eb8d03246b06cad25c62f365, type: 2}
+    level: 55
+  - pokemonSO: {fileID: 11400000, guid: b8682f5b014a6c246aa9e3e88b3ab959, type: 2}
+    level: 65
+  - pokemonSO: {fileID: 11400000, guid: e6e7d4d9a303e1f4a8254fbe120bb663, type: 2}
+    level: 45
 --- !u!1001 &2454642068358411247
 PrefabInstance:
   m_ObjectHideFlags: 0

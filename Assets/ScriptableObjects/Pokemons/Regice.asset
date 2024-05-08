@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271319b851ad31044b78191b6d6d22da, type: 3}
+  m_Name: Regice
+  m_EditorClassIdentifier: 
+  name: Regice
+  frontSprite: {fileID: 21300000, guid: e281112c505b2b84d91a311e2a9f6be8, type: 3}
+  backSprite: {fileID: 21300000, guid: e9a66165e6706134dad90b43201ded83, type: 3}
+  type1: 11
+  type2: 18
+  maxHp: 80
+  attack: 50
+  defence: 100
+  specialAttack: 100
+  specialDefence: 200
+  speed: 50
+  learnableMoves:
+  - moveSO: {fileID: 11400000, guid: d544dbe580bf090458fd464a97a35277, type: 2}
+    level: 1
+  - moveSO: {fileID: 11400000, guid: c379f2b1739e98e4bace00aa704ae057, type: 2}
+    level: 1
+  - moveSO: {fileID: 11400000, guid: 12a8baee0a98abf4c913e2a780207d9e, type: 2}
+    level: 1
+  - moveSO: {fileID: 11400000, guid: 506fee9928a75404ba9779b44f37cd64, type: 2}
+    level: 1

@@ -10,23 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7404a212402dc84d992ef6eb4767644, type: 3}
-  m_Name: ThunderShock
+  m_Name: MirrorShot
   m_EditorClassIdentifier: 
-  name: Thunder Shock
+  name: Mirror Shot
   description: 
-  type: 12
-  power: 40
-  accuracy: 100
-  alwaysHits: 1
-  pp: 30
+  type: 8
+  power: 65
+  accuracy: 85
+  alwaysHits: 0
+  pp: 10
   priority: 0
   moveCategory: 1
   moveEffects:
     boosts: []
     status: 0
   secondaryEffects:
-  - boosts: []
-    status: 4
-    chance: 10
+  - boosts:
+    - stat: 5
+      boost: -1
+    status: 0
+    chance: 30
     target: 0
   target: 0
